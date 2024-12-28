@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
 	char buf[BUF_LEN] = "Hello World, this is from Server";
 	int nread=0;
 	int opt=1;
+	char client_ip4[16]= {0};
 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -58,7 +59,10 @@ int main(int argc, char *argv[]) {
 		if(acceptfd < 0) {
 			continue;
 		}
-		printf("=======> Connected to Client <============\n");
+
+		inet_ntop(AF_INET, &clientAddr.sin_addr, client_ip4, sizeof(client_ip4));
+
+		printf("=======> Connected to Client, IP = %s <============\n", client_ip4);
 		if((nread = write(acceptfd, buf, sizeof(buf))) <= 0) {
 			errExit("write system call failed, errno=%d\n", errno);
 		}
